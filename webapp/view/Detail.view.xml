@@ -1,0 +1,68 @@
+<mvc:View xmlns="sap.m" xmlns:semantic="sap.f.semantic" xmlns:mvc="sap.ui.core.mvc" controllerName="com.deere.orders.controller.Detail"
+	xmlns:l="sap.ui.layout" xmlns:control="com.deere.orders.control">
+	<semantic:SemanticPage id="detailPage" busy="{detailView&gt;/busy}" busyIndicatorDelay="{detailView&gt;/delay}" showFooter="true">
+		<semantic:titleHeading>
+			<Title text="{CustomerName}" level="H2"/>
+		</semantic:titleHeading>
+		<semantic:headerContent>
+			<ObjectAttribute title="{i18n&gt;priceTitle}"/>
+			<ObjectNumber id="objectHeaderNumber" number="{ path: 'NetAmount', formatter: '.formatter.currencyValue' }" unit="{CurrencyCode}"/>
+		</semantic:headerContent>
+		<semantic:content>
+			<l:VerticalLayout>
+				<control:OrderPreparations id="orderPreparations" confirm=".onConfirm"></control:OrderPreparations>
+				<Table id="lineItemsList" width="auto" items="{ToLineItems}" mode="SingleSelectMaster" sticky="ColumnHeaders,HeaderToolbar"
+					updateFinished=".onListUpdateFinished" noDataText="{i18n&gt;detailLineItemTableNoDataText}"
+					busyIndicatorDelay="{detailView&gt;/lineItemTableDelay}" selectionChange="action"
+					xmlns:action="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+					action:wiring="\{'selectionChange':\{'navigation':\{'routeName':'Info'\}\}\}">
+					<headerToolbar>
+						<Toolbar>
+							<Title id="lineItemsTitle" text="{detailView&gt;/lineItemListTitle}" titleStyle="H3" level="H3"/>
+						</Toolbar>
+					</headerToolbar>
+					<columns>
+						<Column>
+							<Text text="{i18n&gt;detailLineItemTableIDColumn}"/>
+						</Column>
+						<Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+							<Text text="{i18n&gt;detailLineItemTableUnitNumberColumn}"/>
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem selected="{= ${ItemPosition} === ${appView>/selectedItemId}}" type="Navigation">
+							<cells>
+								<ObjectIdentifier title="{ProductID}" text="{ItemPosition}"/>
+								<ObjectNumber number="{ path: 'NetAmount', formatter: '.formatter.currencyValue' }" unit="{CurrencyCode}"/>
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+			</l:VerticalLayout>
+		</semantic:content>
+		<!--Semantic ShareMenu Buttons-->
+		<semantic:sendEmailAction>
+			<semantic:SendEmailAction id="shareEmail" press=".onSendEmailPress"/>
+		</semantic:sendEmailAction>
+		<semantic:closeAction>
+			<semantic:CloseAction id="closeColumn" press=".onCloseDetailPress"/>
+		</semantic:closeAction>
+		<semantic:fullScreenAction>
+			<semantic:FullScreenAction id="enterFullScreen"
+				visible="{= !${device&gt;/system/phone} &amp;&amp; !${appView&gt;/actionButtonsInfo/midColumn/fullScreen}}" press=".toggleFullScreen"/>
+		</semantic:fullScreenAction>
+		<semantic:exitFullScreenAction>
+			<semantic:ExitFullScreenAction id="exitFullScreen"
+				visible="{= !${device&gt;/system/phone} &amp;&amp; ${appView&gt;/actionButtonsInfo/midColumn/fullScreen}}" press=".toggleFullScreen"/>
+		</semantic:exitFullScreenAction>
+		<semantic:positiveAction>
+			<semantic:PositiveAction/>
+		</semantic:positiveAction>
+		<semantic:negativeAction>
+			<semantic:NegativeAction/>
+		</semantic:negativeAction>
+		<semantic:footerCustomActions>
+			<Button text="{i18n>DetailFooterCancel}"/>
+		</semantic:footerCustomActions>
+	</semantic:SemanticPage>
+</mvc:View>
