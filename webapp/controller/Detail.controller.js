@@ -31,7 +31,7 @@ sap.ui.define([
 		},
 
 		onConfirm: function (oEvent) {
-			//On Confirm
+			//On Confirm new
 			var oBinding = oEvent.getSource().getBindingContext().getObject();
 			var oMessage = this.getResourceBundle().getText(
 				"OrderPreparationMessage", [oBinding.CustomerID,
